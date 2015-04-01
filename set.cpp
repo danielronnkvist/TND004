@@ -376,7 +376,8 @@ Set<T>::Set ()
 template<typename T>
 Set<T>::Set (T n)
 {
-   //ADD CODE
+    init();
+    insert(tail, n);
 }
 
 
@@ -384,7 +385,19 @@ Set<T>::Set (T n)
 template<typename T>
 Set<T>::Set (T a[], int n)
 {
-    //ADD CODE
+    init();
+    Node* prev = new Node(a[0],nullptr, head);
+    head->next = prev;
+    counter++;
+    for(int i = 1; i < n; i++)
+    {
+        Node* node = new Node(a[i], nullptr, prev);
+        prev->next = node;
+        prev = node;
+        counter++;
+    }
+    prev->next = tail;
+    tail->prev = prev;
 }
 
 
@@ -392,7 +405,16 @@ Set<T>::Set (T a[], int n)
 template<typename T>
 Set<T>::Set (const Set& b)
 {
-    //ADD CODE
+    init();
+    Node* node = b.tail->prev;
+    Node* t = tail;
+    while(node->prev)
+    {
+        insert(t, node->value);
+        node = node->prev;
+        t = t->prev;
+    }
+    counter = b.counter;
 }
 
 
@@ -400,7 +422,9 @@ Set<T>::Set (const Set& b)
 template<typename T>
 Set<T>::~Set ()
 {
-    //ADD CODE
+    clear();
+    delete head;
+    delete tail;
 }
 
 
@@ -408,8 +432,14 @@ Set<T>::~Set ()
 template<typename T>
 const Set<T>& Set<T>::operator=(const Set& b)
 {
-    //ADD CODE
-    return *this; //delete this code
+    if(&b != this)
+    {
+        Set s(b);
+        swap(head, s.head);
+        swap(tail, s.tail);
+        swap(counter, s.counter);
+    }
+    return *this;
 }
 
 
@@ -418,7 +448,13 @@ template<typename T>
 bool Set<T>::is_empty () const
 {
    //ADD CODE
-   return false; //delete this code
+   if(head->next == tail)
+   {
+        return true;
+   }else{
+        return false;
+   }
+
 }
 
 
@@ -426,8 +462,16 @@ bool Set<T>::is_empty () const
 template<typename T>
 bool Set<T>::is_member (T val) const
 {
-   //ADD CODE
-   return false; //delete this code
+   Node* node = head->next;
+   while(node->next)
+   {
+       if(node->value == val)
+       {
+           return true;
+       }
+       node = node->next;
+   }
+   return false;
 }
 
 
@@ -435,8 +479,7 @@ bool Set<T>::is_member (T val) const
 template<typename T>
 int Set<T>::cardinality() const
 {
-    //ADD CODE
-    return 0; //delete this code
+    return counter;
 }
 
 
@@ -444,16 +487,25 @@ int Set<T>::cardinality() const
 template<typename T>
 void Set<T>::clear()
 {
-    //ADD CODE
+    while(head->next != tail)
+    {
+        erase(head->next);
+    }
+
+    head->next = tail;
+    tail->prev = head;
+    counter = 0;
 }
 
 //Return true, if the set is a subset of b, otherwise false
-//a <= b iff every member of a is a member of b
+//a <= b if every member of a is a member of b
 template<typename T>
 bool Set<T>::operator<=(const Set& b) const
 {
-    //ADD CODE
-    return false; //delete this code
+    if(_intersection(b).counter == counter )
+        return true;
+    else
+        return false;
 }
 
 
@@ -462,8 +514,7 @@ bool Set<T>::operator<=(const Set& b) const
 template<typename T>
 bool Set<T>::operator==(const Set& b) const
 {
-    //ADD CODE
-    return false; //delete this code
+    return (b <= *this && *this <= b);
 }
 
 
@@ -472,8 +523,7 @@ bool Set<T>::operator==(const Set& b) const
 template<typename T>
 bool Set<T>::operator<(const Set& b) const
 {
-    //ADD CODE
-    return false; //delete this code
+    return (*this <= b && !(b <= *this));
 }
 
 
@@ -485,8 +535,11 @@ bool Set<T>::operator<(const Set& b) const
 template<typename T>
 Set<T>& Set<T>::insert(Node *p, T val)
 {
-    //ADD CODE
-    return *this; //delete this code
+    Node* node = new Node(val, p, p->prev);
+    p->prev->next = node;
+    p->prev = node;
+    counter++;
+    return *this;
 }
 
 
@@ -494,15 +547,21 @@ Set<T>& Set<T>::insert(Node *p, T val)
 template<typename T>
 Set<T>& Set<T>::erase(Node *p)
 {
-    //ADD CODE
-    return *this; //delete this code
+    p->prev->next = p->next;
+    p->next->prev = p->prev;
+    delete p;
+    counter--;
+    return *this;
 }
 
 //Create an empty Set
 template<typename T>
 void Set<T>::init()
 {
-    //ADD CODE
+    counter = 0;
+    tail = new Node(T());
+    head = new Node(T(), tail);
+    tail->prev = head;
 }
 
 
@@ -510,7 +569,12 @@ void Set<T>::init()
 template<typename T>
 void Set<T>::print(ostream& os) const
 {
-    //ADD CODE
+    Node* n = head->next;
+    while(n->next)
+    {
+        os << n->value << " ";
+        n = n->next;
+    }
 }
 
 
@@ -519,8 +583,39 @@ void Set<T>::print(ostream& os) const
 template<typename T>
 Set<T> Set<T>::_union(const Set& b) const
 {
-    //ADD CODE
-    return *this; //delete this code
+    Set s;
+    Node* aNode = head->next;
+    Node* bNode = b.head->next;
+
+    while (aNode->next && bNode->next)
+    {
+        if(aNode->value < bNode->value)
+        {
+            s.insert(s.tail, aNode->value);
+            aNode = aNode->next;
+        }else if(aNode->value > bNode->value){
+            s.insert(s.tail, bNode->value);
+            bNode = bNode->next;
+        }else{
+            s.insert(s.tail, aNode->value);
+            aNode = aNode->next;
+            bNode = bNode->next;
+        }
+    }
+
+    while(aNode->next)
+    {
+        s.insert(s.tail, aNode->value);
+        aNode = aNode->next;
+    }
+
+    while(bNode->next)
+    {
+        s.insert(s.tail, bNode->value);
+        bNode = bNode->next;
+    }
+
+    return s;
 }
 
 
@@ -529,8 +624,17 @@ Set<T> Set<T>::_union(const Set& b) const
 template<typename T>
 Set<T> Set<T>::_intersection(const Set& b) const
 {
-    //ADD CODE
-    return *this; //delete this code
+    Set s;
+    Node* node = head->next;
+    while(node->next)
+    {
+        if(b.is_member(node->value))
+        {
+            s.insert(s.tail ,node->value);
+        }
+        node = node->next;
+    }
+    return s;
 }
 
 
@@ -539,8 +643,17 @@ Set<T> Set<T>::_intersection(const Set& b) const
 template<typename T>
 Set<T> Set<T>::_difference(const Set& b) const
 {
-    //ADD CODE
-    return *this; //delete this code
+    Set s;
+    Node* node = head->next;
+    while(node->next)
+    {
+        if(!b.is_member(node->value))
+        {
+            s.insert(s.tail ,node->value);
+        }
+        node = node->next;
+    }
+    return s;
 }
 
 
