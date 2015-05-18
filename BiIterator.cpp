@@ -40,8 +40,7 @@ ELEMENT* BiIterator::operator->() const
 //Equality comparison operator
 bool BiIterator::operator==(const BiIterator &it) const
 {
-    //ADD CODE
-    return false;
+	return (current == it.current);
 }
 
 

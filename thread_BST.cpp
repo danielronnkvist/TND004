@@ -54,7 +54,7 @@ void BST_threaded::insert(ELEMENT v)
     if (empty())
     {
         //Insert first node of the BST has a left child of the BST
-        root->left = new Node(v, root, root);
+        root->left = new Node(v, root, root);	
         root->left->l_thread = root->left->r_thread = true;
 
         root->l_thread = false;
@@ -79,10 +79,15 @@ void BST_threaded::remove(string key)
 //then an ELEMENT (key,0) is inserted and a reference to it is returned
 ELEMENT& BST_threaded::operator[](string key)
 {
-    //ADD CODE
-    static ELEMENT e("", 0); //MUST remove this code
+	BiIterator it = find(key);
+	BiIterator endit = this->end();
+	if (it == endit)
+	{
+		insert(ELEMENT(key,0));
+		it = find(key);
+	}
 
-    return e; //MUST remove this code
+	return *(it);
 }
 
 
@@ -91,8 +96,16 @@ ELEMENT& BST_threaded::operator[](string key)
 //Otherwise, return this->end().
 BiIterator BST_threaded::find(string key) const
 {
-    //ADD CODE
-    return end();
+	Node* node = root->left->find(key);
+	if (node != nullptr)
+	{ 
+		return BiIterator(node);
+	}
+	else
+	{
+		return this->end();
+	}
+		
 }
 
 
