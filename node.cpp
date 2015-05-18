@@ -97,9 +97,6 @@ void Node::removeMe(Node* parent, bool isRight)
 //If there is no node storing key then return nullptr
 Node* Node::find(string key)
 {
-    //if((l_thread || r_thread) && value.first != key )
-    //    return nullptr;
-
     if(value.first > key && !l_thread)
         return left->find(key);
     else if(value.first < key && !r_thread)

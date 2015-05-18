@@ -40,7 +40,8 @@ int main()
     *PHASE 1: insert()                                    *
     *         create the tree of slide 9, Fö 6            *
     *******************************************************/
-    cout << "\**TEST PHASE 1: insert"
+
+    cout << "\n**TEST PHASE 1: insert"
          << endl << endl;
 
     string V[] = {"6", "4", "5", "8", "7", "2"};
@@ -79,7 +80,6 @@ int main()
     cout << "(" << table["100"].first << ","
          << table["100"].second << ")" << " has been inserted in the table" << endl;
 
-//
 //   /******************************************************
 //   *PHASE 3: iterators                                   *
 //   *******************************************************/

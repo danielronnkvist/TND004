@@ -79,15 +79,15 @@ void BST_threaded::remove(string key)
 //then an ELEMENT (key,0) is inserted and a reference to it is returned
 ELEMENT& BST_threaded::operator[](string key)
 {
-	BiIterator it = find(key);
-	BiIterator endit = this->end();
-	if (it == endit)
-	{
-		insert(ELEMENT(key,0));
-		it = find(key);
-	}
+    BiIterator it = find(key);
+    
+    if(it == end())
+    {
+        insert(ELEMENT(key, 0));
+        it = find(key);
+    }
+    return *it;
 
-	return *(it);
 }
 
 
@@ -96,16 +96,11 @@ ELEMENT& BST_threaded::operator[](string key)
 //Otherwise, return this->end().
 BiIterator BST_threaded::find(string key) const
 {
-	Node* node = root->left->find(key);
-	if (node != nullptr)
-	{ 
-		return BiIterator(node);
-	}
-	else
-	{
-		return this->end();
-	}
-		
+    Node* node = root->left->find(key);
+    if(node != nullptr)
+        return BiIterator(node);
+    else
+        return end();
 }
 
 
