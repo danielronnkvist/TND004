@@ -35,10 +35,13 @@ bool Node::insert(ELEMENT v)
     {
         if(l_thread)
         {
+            Node* temp = left;
             left = new Node(v);
             l_thread = false;
 			left->l_thread = left->r_thread = true;
-
+            
+            left->right = this;
+            left->left = temp;
             return true;
         }
         else
@@ -48,9 +51,13 @@ bool Node::insert(ELEMENT v)
     {
         if(r_thread)
         {
+            Node* temp = right;
             right = new Node(v);
             r_thread = false;
 			right->l_thread = right->r_thread = true;
+            
+            right->left = this;
+            right->right = temp;
             return true;
         }
         else
