@@ -54,7 +54,7 @@ void BST_threaded::insert(ELEMENT v)
     if (empty())
     {
         //Insert first node of the BST has a left child of the BST
-        root->left = new Node(v, root, root);
+        root->left = new Node(v, root, root);	
         root->left->l_thread = root->left->r_thread = true;
 
         root->l_thread = false;
@@ -87,7 +87,7 @@ ELEMENT& BST_threaded::operator[](string key)
         it = find(key);
     }
     return *it;
-    
+
 }
 
 

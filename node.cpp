@@ -108,10 +108,10 @@ Node* Node::find(string key)
         return left->find(key);
     else if(value.first < key && !r_thread)
         return right->find(key);
-    else if(value.first == key)
-        return this;
-    else
-        return nullptr;
+	else if (value.first == key)
+		return this;
+	else
+		return nullptr;
 }
 
 
