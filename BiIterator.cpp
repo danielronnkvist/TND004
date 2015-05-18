@@ -25,7 +25,7 @@ BiIterator::BiIterator(Node *ptr)
 //Dereferencing operator
 ELEMENT& BiIterator::operator*() const
 {
-    //ADD CODE
+	return current->value;
 }
 
 

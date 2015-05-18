@@ -37,6 +37,8 @@ bool Node::insert(ELEMENT v)
         {
             left = new Node(v);
             l_thread = false;
+			left->l_thread = left->r_thread = true;
+
             return true;
         }
         else
@@ -48,6 +50,7 @@ bool Node::insert(ELEMENT v)
         {
             right = new Node(v);
             r_thread = false;
+			right->l_thread = right->r_thread = true;
             return true;
         }
         else
@@ -112,7 +115,7 @@ Node* Node::findMin()
 {
     if(l_thread)
        return this;
-    return findMin(left);
+    return left->findMin();
 }
 
 
@@ -122,7 +125,7 @@ Node* Node::findMax()
 {
     if(r_thread)
        return this;
-    return findMax(right);
+    return right->findMax();
 }
 
 

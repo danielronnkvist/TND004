@@ -20,30 +20,31 @@ using namespace std;
 BST_threaded::BST_threaded()
  : counter(0)
 {
+    root = new Node(ELEMENT());
+	root->left = root->right = root;
+	root->l_thread = root->r_thread = true;
 
-    root = new Node();
+	counter = 0;
 }
 
 
 //destructor
 BST_threaded::~BST_threaded()
 {
-  //ADD CODE
+	delete root;
 }
 
 
 //Test if the tree is empty
 bool BST_threaded::empty() const
 {
-    //ADD CODE
-    return true;
+	return(counter == 0);
 }
 
 //Return mumber of keys (elements) stored in the tree
 int BST_threaded::size() const
 {
-   //ADD CODE
-    return 0;
+	return counter;
 }
 
 
