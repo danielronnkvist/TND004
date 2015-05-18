@@ -14,7 +14,7 @@
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 
-// Constructor
+// Constructro
 BiIterator::BiIterator(Node *ptr)
  : current(ptr)
  {
