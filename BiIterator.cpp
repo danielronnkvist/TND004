@@ -54,7 +54,7 @@ bool BiIterator::operator!=(const BiIterator &it) const
 BiIterator& BiIterator::operator++()
 {
 	if (!current->r_thread)
-		current = current->findMin();
+		current = current->right->findMin();
 	else
 		current = current->right;
 
@@ -69,7 +69,7 @@ BiIterator BiIterator::operator++(int)
 	BiIterator it(current);
 
 	if (!current->r_thread)
-		current = current->findMin();
+		current = current->right->findMin();
 	else
 		current = current->right;
 
@@ -80,7 +80,7 @@ BiIterator BiIterator::operator++(int)
 BiIterator& BiIterator::operator--()
 {
 	if (!current->l_thread)
-		current = current->findMax();
+		current = current->left->findMax();
 	else
 		current = current->left;
 
@@ -93,7 +93,7 @@ BiIterator BiIterator::operator--(int)
 	BiIterator it(current);
 
 	if (!current->l_thread)
-		current = current->findMax();
+		current = current->left->findMax();
 	else
 		current = current->left;
 
