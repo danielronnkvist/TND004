@@ -49,12 +49,13 @@ int main()
     }
 
     cout << "Loading the words from " << name << " ...\n";
-
+    string s;
+    int count = 0;
     //Read words and load them in the table
     while (textFile >> s)
     {
         //remove non-alphanumeric chars
-        s.erase(remove_if(s.begin(), s.end(), isNotAlnum), s.end());
+        s.erase(remove_if(s.begin(), s.end(), ::ispunct), s.end());
 
         //convert to lower-case letters
         transform(s.begin(), s.end(), s.begin(), ::tolower);
@@ -74,8 +75,18 @@ int main()
     * - frequency table                                   *
     *******************************************************/
 
-    //ADD CODE
-
+    cout << "Number of words in the file: " << count << endl;
+    cout << "Number of unique words in the file: " << table.size() << endl;
+    
+    BiIterator it = table.begin();
+    
+    cout << "  \tKEY" << "\tCOUNTER" << endl;
+    cout << "==============================\n";
+    for( ; it != table.end(); it++)
+    {
+        cout << setw(10) << it->first
+        << setw(12) << it->second << endl;
+    }
 
     /******************************************************
     * PHASE 3: remove all words with counter 1            *
@@ -85,18 +96,50 @@ int main()
     string wait;
     getline(cin, wait);
 
-    //ADD CODE
-
-
+    std::vector<string> ones;
+    for(BiIterator it = table.begin(); it != table.end(); ++it)
+    {
+        if(it->second == 1)
+            ones.push_back(it->first);
+    }
+    
+    for(std::vector<string>::iterator it = ones.begin() ; it != ones.end(); ++it)
+        table.remove(*it);
+    
+    cout << "Number of words in the file: " << count << endl;
+    cout << "Number of unique words in the file: " << table.size() << endl;
+    
+    it = table.begin();
+    
+    cout << "  \tKEY" << "\tCOUNTER" << endl;
+    cout << "==============================\n";
+    for( ; it != table.end(); it++)
+    {
+        cout << setw(10) << it->first
+        << setw(12) << it->second << endl;
+    }
 
     /***********************************************************
     * PHASE 4: request two words to the user w1 and w2         *
     *          then display all words in the interval [w1,w2]  *
     ************************************************************/
 
-    //ADD CODE
+    string word1, word2;
+    cout << "Word 1: ";
+    cin >> word1;
+    cout << "Word 2: ";
+    cin >> word2;
 
-
+    it = table.find(word1);
+    BiIterator it2 = table.find(word2);
+    if(*it < *it2)
+    {
+        for(; it->first != word2 || it != table.end(); it++)
+            cout << it->first << endl;
+        cout << it->first << endl;
+    }else{
+        cout << "Words are not in order or in the table..." << endl;
+    }
 
     return 0;
 }
