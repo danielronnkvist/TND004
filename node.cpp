@@ -22,7 +22,10 @@ Node::Node(ELEMENT v, Node *l, Node *r)
 //recursively deletes the nodes in the left_subtree and right-subtree
 Node::~Node()
 {
-    //ADD CODE
+    if(!l_thread)
+        delete left;
+    if(!r_thread)
+        delete right;
 }
 
 
