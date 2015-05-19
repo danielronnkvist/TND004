@@ -32,8 +32,7 @@ ELEMENT& BiIterator::operator*() const
 //Member access operator
 ELEMENT* BiIterator::operator->() const
 {
-    //ADD CODE
-    return nullptr;
+	return &(current->value);
 }
 
 
@@ -47,16 +46,19 @@ bool BiIterator::operator==(const BiIterator &it) const
 //Inequality comparison operator
 bool BiIterator::operator!=(const BiIterator &it) const
 {
-   //ADD CODE
-    return false;
+	return (current != it.current);
 }
 
 
 //Pre increment operator
 BiIterator& BiIterator::operator++()
 {
-   //ADD CODE
-    return *this;
+	if (!current->r_thread)
+		current = current->findMin();
+	else
+		current = current->right;
+
+	return *this;
 }
 
 
@@ -64,22 +66,38 @@ BiIterator& BiIterator::operator++()
 //Pos increment operator: see page 277 and 278 of C++ direkt
 BiIterator BiIterator::operator++(int)
 {
-   //ADD CODE
-    return *this;
+	BiIterator it(current);
+
+	if (!current->r_thread)
+		current = current->findMin();
+	else
+		current = current->right;
+
+	return it;
 }
 
 //Pre decrement operator
 BiIterator& BiIterator::operator--()
 {
-   //ADD CODE
-    return *this;
+	if (!current->l_thread)
+		current = current->findMax();
+	else
+		current = current->left;
+
+	return *this;
 }
 
 //Pos decrement operator
 BiIterator BiIterator::operator--(int)
 {
-   //ADD CODE
-    return *this;
+	BiIterator it(current);
+
+	if (!current->l_thread)
+		current = current->findMax();
+	else
+		current = current->left;
+
+	return it;
 }
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
