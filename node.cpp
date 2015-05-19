@@ -64,7 +64,7 @@ bool Node::insert(ELEMENT v)
         else
             return right->insert(v);
     }
-    else if(value.first == v.first)
+    else
         return false;
 }
 
