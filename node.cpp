@@ -31,18 +31,19 @@ Node::~Node()
 //Otherwise, return false --v already exists in the tree
 bool Node::insert(ELEMENT v)
 {
+
     if(value.first > v.first)
     {
         if(l_thread)
         {
-            Node* temp = left;
-            left = new Node(v);
-            l_thread = false;
-			left->l_thread = left->r_thread = true;
-            
-            left->right = this;
-            left->left = temp;
-            return true;
+			Node* node = new Node(v);
+			node->left = left;
+			node->right = this;
+			node->l_thread = node->r_thread = true;
+
+			left = node;
+			l_thread = false;
+			return true;
         }
         else
             return left->insert(v);
@@ -51,13 +52,13 @@ bool Node::insert(ELEMENT v)
     {
         if(r_thread)
         {
-            Node* temp = right;
-            right = new Node(v);
-            r_thread = false;
-			right->l_thread = right->r_thread = true;
-            
-            right->left = this;
-            right->right = temp;
+			Node* node = new Node(v);
+			node->right = right;
+			node->left = this;
+			node->l_thread = node->r_thread = true;
+			
+			right = node;
+			r_thread = false;
             return true;
         }
         else
@@ -119,8 +120,9 @@ Node* Node::find(string key)
 //of the tree whose root is this node
 Node* Node::findMin()
 {
-    if(l_thread)
-       return this;
+
+	if (l_thread)
+		return this;
     return left->findMin();
 }
 

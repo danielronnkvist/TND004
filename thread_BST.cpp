@@ -107,8 +107,8 @@ BiIterator BST_threaded::find(string key) const
 //Return an iterator referring to the first node in the inorder traversal of the BST
 BiIterator BST_threaded::begin() const
 {
-    //ADD CODE
-    return end();
+	Node* node = root->findMin();
+	return BiIterator(node);
 }
 
 
