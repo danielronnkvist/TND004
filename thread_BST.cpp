@@ -68,7 +68,7 @@ void BST_threaded::insert(ELEMENT v)
 //Remove node with key from the tree
 void BST_threaded::remove(string key)
 {
-   //ADD CODE
+	counter -= root->left->remove(key, root, false);
 }
 
 

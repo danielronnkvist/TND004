@@ -77,8 +77,32 @@ bool Node::insert(ELEMENT v)
 //isRight==true: this node is right child of parent
 bool Node::remove(string key, Node* parent, bool isRight)
 {
-    //ADD CODE
-    return false;
+	if (value.first > key && !l_thread)
+	{
+		return left->remove(key, this, false);
+	}
+	else if (value.first < key && !r_thread)
+	{
+		return right->remove(key, this, true);
+	}
+	else if (value.first == key)
+	{
+		//Node has two children
+		if (!l_thread && !r_thread)
+		{
+			//Replace with smallest value
+			value = right->findMin()->value;
+			return right->remove(value.first, this, true);
+		}
+		else{
+			removeMe(parent, isRight);
+			return true;
+		}
+	}
+	else
+	{
+		return false;
+	}
 }
 
 
@@ -95,7 +119,44 @@ bool Node::remove(string key, Node* parent, bool isRight)
 //2c: a right child with no children
 void Node::removeMe(Node* parent, bool isRight)
 {
-   //ADD CODE
+    //Case 1A
+	if (l_thread && !r_thread && !isRight)
+	{
+		parent->left = right;
+		right->findMin()->left = left;
+	}
+	//Case 1B
+	else if (r_thread && !l_thread && !isRight)
+	{
+		parent->left = left;
+		left->findMax()->right = right;
+	}
+	//Case 1C
+	else if (l_thread && r_thread && !isRight)
+	{
+		parent->left = left;
+		parent->l_thread = true;
+	}
+	//Case 2A
+	else if (l_thread && !r_thread && isRight)
+	{
+		parent->right = right;
+		right->findMin()->left = left;
+	}
+	//Case 2B
+	else if (r_thread && !l_thread && isRight)
+	{
+		parent->right = left;
+		left->findMax()->right = right;
+	}
+	//Case 2C
+	else if (l_thread && r_thread && isRight)
+	{
+		parent->right = right;
+		parent->r_thread = true;
+	}
+	this->l_thread = this->r_thread = true;
+	delete this;
 }
 
 
