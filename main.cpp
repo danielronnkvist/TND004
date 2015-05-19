@@ -1,145 +1,137 @@
-/**********************************************
-* File: main.cpp                              *
-* Author: Aida Nordman                        *
-* Course: TND004, Lab 3                       *
-* Date: VT2, 2015                             *
-* Description: frequency table                *
-* DO NOT MODIFY                               *
-***********************************************/
-
-#include "threaded_BST.h"
-#include "BiIterator.h"
+/*********************************************
+* file:	~\tnd004\lab\lab4a\main.cpp          *
+* remark: test program for lab 4 part A      *
+**********************************************/
 
 #include <iostream>
-#include <iomanip>
-#include <algorithm>
-#include <string>
 #include <fstream>
-#include <vector>
+#include <string>
+#include <cstdlib>
 
 using namespace std;
 
+#include "digraph.h"
 
+// -- FUNCTION DECLARATIONS
 
-/*******************************
-* 2. Main function             *
-********************************/
+int readInt(string prompt);
 
+int menu();
+
+Digraph * readGraph(string fileName);
+
+// -- MAIN PROGRAM
 
 int main()
 {
-    MAP table;
+    int choice = 0;
+    string fileName;
+    int s, t;
 
-    string name;
+    Digraph *G = new Digraph(1);
+    Digraph *temp;
 
-    /******************************************************
-    * PHASE 0: Load the words in the text file            *
-    *          into a the table                           *
-    *******************************************************/
-
-    cout << "File name? ";
-    getline(cin, name);
-
-    ifstream textFile(name);
-
-    if (!textFile)
+    while (choice != 9)
     {
-        cerr << "Text file could not be opened!!" << endl;
-        exit(1);
-    }
-
-    cout << "Loading the words from " << name << " ...\n";
-    string s;
-    int count = 0;
-    //Read words and load them in the table
-    while (textFile >> s)
-    {
-        //remove non-alphanumeric chars
-        s.erase(remove_if(s.begin(), s.end(), ::ispunct), s.end());
-
-        //convert to lower-case letters
-        transform(s.begin(), s.end(), s.begin(), ::tolower);
-
-        if (!s.size()) continue; //skip numbers and punctuation signs
-
-        table[s].second++;  //if s is not in the table then it is inserted
-
-        count++;
-    }
-
-
-    /******************************************************
-    * PHASE 1: Display                                    *
-    * - number of words in the text                       *
-    * - number of unique words (occurring only once)      *
-    * - frequency table                                   *
-    *******************************************************/
-
-    cout << "Number of words in the file: " << count << endl;
-    cout << "Number of unique words in the file: " << table.size() << endl;
-    
-    BiIterator it = table.begin();
-    
-    cout << "  \tKEY" << "\tCOUNTER" << endl;
-    cout << "==============================\n";
-    for( ; it != table.end(); it++)
-    {
-        cout << setw(10) << it->first
-        << setw(12) << it->second << endl;
-    }
-
-    /******************************************************
-    * PHASE 3: remove all words with counter 1            *
-    *          and display table again                    *
-    *******************************************************/
-
-    string wait;
-    getline(cin, wait);
-
-    std::vector<string> ones;
-    for(BiIterator it = table.begin(); it != table.end(); ++it)
-    {
-        if(it->second == 1)
-            ones.push_back(it->first);
-    }
-    
-    for(std::vector<string>::iterator it = ones.begin() ; it != ones.end(); ++it)
-        table.remove(*it);
-    
-    cout << "Number of words in the file: " << count << endl;
-    cout << "Number of unique words in the file: " << table.size() << endl;
-    
-    it = table.begin();
-    
-    cout << "  \tKEY" << "\tCOUNTER" << endl;
-    cout << "==============================\n";
-    for( ; it != table.end(); it++)
-    {
-        cout << setw(10) << it->first
-        << setw(12) << it->second << endl;
-    }
-
-    /***********************************************************
-    * PHASE 4: request two words to the user w1 and w2         *
-    *          then display all words in the interval [w1,w2]  *
-    ************************************************************/
-
-    string word1, word2;
-    cout << "Word 1: ";
-    cin >> word1;
-    cout << "Word 2: ";
-    cin >> word2;
-
-    it = table.find(word1);
-    BiIterator it2 = table.find(word2);
-    if(*it < *it2)
-    {
-        for(; it->first != word2 || it != table.end(); it++)
-            cout << it->first << endl;
-        cout << it->first << endl;
-    }else{
-        cout << "Words are not in order or in the table..." << endl;
+        switch (choice = menu())
+        {
+            case 1:
+                cout << "File name   ? ";
+                cout << flush;
+                getline(cin, fileName);
+                temp = readGraph(fileName);
+                if (temp != nullptr)
+                {
+                    delete G;
+                    G = temp;
+                }
+                break;
+            case 2:
+                s = readInt("Source s    ? ");
+                G->uwsssp(s);
+                break;
+            case 3:
+                s = readInt("Source s    ? ");
+                G->pwsssp(s);
+                break;
+            case 4:
+                cout << endl;
+                G->printGraph();
+                break;
+            case 5:
+                cout << endl;
+                G->printTree();
+                break;
+            case 6:
+                t = readInt("Target t    ? ");
+                cout << "\nShortest path =";
+                G->printPath(t);
+                break;
+            case 9:
+                cout << "Bye bye ..." << endl;
+                break;
+            default:
+                cout << "Bad choice!" << endl;
+        }
     }
 
     return 0;
+}
+
+// -- FUNCTION DEFINITIONS
+
+int readInt(string prompt)
+{
+    string number;
+
+    cout << prompt << flush;
+    getline(cin, number);
+
+    return atoi(number.c_str());
+}
+
+int menu()
+{
+    string choice;
+
+    cout << endl;
+    cout << "== Menu =======\n";
+    cout << "1. readGraph   \n";
+    cout << "2. uwsssp      \n";
+    cout << "3. pwsssp      \n";
+    cout << "4. printGraph  \n";
+    cout << "5. printTree   \n";
+    cout << "6. printPath   \n";
+    cout << "9. quit        \n";
+    cout << "===============\n";
+
+    return readInt("Your choice ? ");
+}
+
+Digraph * readGraph(string fileName)
+{
+    int n, u, v, w;
+    Digraph *temp = nullptr;
+
+    ifstream file(fileName.c_str());
+
+    if (file.good())
+    {
+         file >> n;
+         temp = new Digraph(n);
+
+         while (!file.eof())
+         {
+             file >> u >> v >> w;
+             temp->insertEdge(u, v, w);
+         }
+
+         file.close();
+    }
+    else
+    {
+         cout << "File not found!" << endl;
+    }
+
+    return temp;
 }
