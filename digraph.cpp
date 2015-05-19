@@ -66,7 +66,36 @@ void Digraph::uwsssp(int s)
          return;
     }
 
-    // *** TODO ***
+    Queue<int> Q;
+
+    for (int i = 0; i <= size; i++)
+    {
+        dist[i] = -1;
+        path[i] = 0;
+    }
+
+    dist[s] = 0;
+
+    Q.enqueue(s);
+    while (!Q.isEmpty())
+    {
+        int v = Q.getFront();
+        Q.dequeue();
+        List vertex = array[v];
+        Node* node;
+        for(node = vertex.getFirst(); node != nullptr; node = vertex.getNext())
+        {
+            int u= node->vertex;
+            if(dist[u] == -1)
+            {
+                dist[u] = dist[v] + 1;
+                path[u] = v;
+                Q.enqueue(u);
+            }
+
+        }
+
+    }
 }
 
 // positive weighted single source shortest pats
