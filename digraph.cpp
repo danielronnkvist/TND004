@@ -107,7 +107,49 @@ void Digraph::pwsssp(int s)
          return;
     }
 
-    // *** TODO ***
+    for (int i = 0; i <= size; i++)
+    {
+        dist[i] = -1;
+        path[i] = 0;
+        done[i] = false;
+    }
+
+    dist[s] = 0;
+    done[s] = true;
+    int v = s;
+    while (true)
+    {
+        List vertex = array[v];
+        Node* node = vertex.getFirst();
+        bool firstRun = true;
+        int smallestDist;
+        int newIndex = -1;
+        for(; node != nullptr; node = vertex.getNext())
+        {
+            int u = node->vertex;
+            int w = node->weight;
+            if(!done[u] && ((dist[u] > dist[v] + w) || (dist[v] == -1)))
+            {
+                if(firstRun)
+                {
+                    smallestDist = w;
+                    firstRun = false;
+                }
+                dist[u] = dist[v] + w;
+                path[u] = v;
+                if(dist[u] < smallestDist)
+                {
+                    smallestDist = dist[u];
+                    newIndex = u;
+                }
+            }
+
+        }
+        if(newIndex == -1)
+            break;
+
+        done[v] = true;
+        v = newIndex;
 }
 
 // print graph
