@@ -106,7 +106,7 @@ void Digraph::pwsssp(int s)
 		return;
 	}
 
-	for (int i = 0; i <= size; i++)
+	for (int i = 1; i <= size; i++)
 	{
 		dist[i] = INFINITY_INT;
 		path[i] = 0;
@@ -120,7 +120,7 @@ void Digraph::pwsssp(int s)
 		//Find smallest unknown distance vertex
 		int newIndex = -1;
 		int smallestDist = INFINITY_INT;
-		for (int i = 0; i <= size; i++)
+		for (int i = 1; i <= size; i++)
 		{
 			if (!done[i] && dist[i] < smallestDist)
 				newIndex = i;
@@ -189,6 +189,13 @@ void Digraph::printPath(int t) const
          cout << "\nERROR: expected target t in range 1.." << size << " !" << endl;
          return;
     }
-
-    // *** TODO ***
+    string s = "";
+    int n = t;
+    while(path[n] > 0)
+    {
+        s =  " --> " + std::to_string(n) + s;
+        n = path[n];
+    }
+    s = std::to_string(n) + s;
+    cout << s << " dist(" << dist[t] << ")" << endl;
 }
