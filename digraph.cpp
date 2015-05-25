@@ -14,8 +14,7 @@ using namespace std;
 #include "digraph.h"
 #include "queue.h"
 
-const int INFINITY = 9999;
-
+const int INFINITY_INT = 9999;
 // -- CONSTRUCTORS
 
 Digraph::Digraph(int n)
@@ -101,55 +100,54 @@ void Digraph::uwsssp(int s)
 // positive weighted single source shortest pats
 void Digraph::pwsssp(int s)
 {
-    if (s < 1 || s > size)
-    {
-         cout << "\nERROR: expected source s in range 1.." << size << " !" << endl;
-         return;
-    }
+	if (s < 1 || s > size)
+	{
+		cout << "\nERROR: expected source s in range 1.." << size << " !" << endl;
+		return;
+	}
 
-    for (int i = 0; i <= size; i++)
-    {
-        dist[i] = -1;
-        path[i] = 0;
-        done[i] = false;
-    }
+	for (int i = 0; i <= size; i++)
+	{
+		dist[i] = INFINITY_INT;
+		path[i] = 0;
+		done[i] = false;
+	}
 
-    dist[s] = 0;
-    done[s] = true;
-    int v = s;
-    while (true)
-    {
-        List vertex = array[v];
-        Node* node = vertex.getFirst();
-        bool firstRun = true;
-        int smallestDist;
-        int newIndex = -1;
-        for(; node != nullptr; node = vertex.getNext())
-        {
-            int u = node->vertex;
-            int w = node->weight;
-            if(!done[u] && ((dist[u] > dist[v] + w) || (dist[v] == -1)))
-            {
-                if(firstRun)
-                {
-                    smallestDist = w;
-                    firstRun = false;
-                }
-                dist[u] = dist[v] + w;
-                path[u] = v;
-                if(dist[u] < smallestDist)
-                {
-                    smallestDist = dist[u];
-                    newIndex = u;
-                }
-            }
+	dist[s] = 0;
+	int v = -1;
+	while (true)
+	{
+		//Find smallest unknown distance vertex
+		int newIndex = -1;
+		int smallestDist = INFINITY_INT;
+		for (int i = 0; i <= size; i++)
+		{
+			if (!done[i] && dist[i] < smallestDist)
+				newIndex = i;
+		}
+		if (newIndex == -1)
+			break;
 
-        }
-        if(newIndex == -1)
-            break;
+		v = newIndex;
+		List vertex = array[v];
+		done[v] = true;
 
-        done[v] = true;
-        v = newIndex;
+
+		Node* node = vertex.getFirst();
+		for (; node != nullptr; node = vertex.getNext())
+		{
+			int u = node->vertex;
+			if (!done[u])
+			{
+				int cvw = node->weight;
+				if (dist[u] > dist[v] + cvw)
+				{
+					dist[u] = dist[v] + cvw;
+					path[u] = v;
+				}
+			}
+		}
+	}
 }
 
 // print graph
