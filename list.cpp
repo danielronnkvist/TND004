@@ -1,5 +1,5 @@
 /*********************************************
-* file:	~\tnd004\lab\lab4a\list.h            *
+* file:	~\tnd004\lab\lab4b\list.cpp          *
 * remark: implementation of adjacency lists  *
 **********************************************/
 
@@ -21,7 +21,7 @@ List::List()
 
 List::~List()
 {
-    while (header != nullptr)
+    while (header != NULL)
     {
         Node *temp = header;
         header = temp->next;
@@ -31,17 +31,17 @@ List::~List()
 
 // -- MEMBER FUNCTIONS
 
-// return pointer to first node (or nullptr)
+// return pointer to first node (or NULL)
 Node * List::getFirst()
 {
     current = header->next;
     return current;
 }
 
-// return pointer to next node (or nullptr)
+// return pointer to next node (or NULL)
 Node * List::getNext()
 {
-    if (current != nullptr)
+    if (current != NULL)
     {
         current = current->next;
     }
@@ -54,12 +54,12 @@ void List::insert(int v, int w)
 {
     Node *p = header;
 
-    while (p->next != nullptr && p->next->vertex < v)
+    while (p->next != NULL && p->next->vertex < v)
     {
         p = p->next;
     }
 
-    if (p->next == nullptr || p->next->vertex > v)
+    if (p->next == NULL || p->next->vertex > v)
     {
         p->next = new Node(v, w, p->next);
     }
@@ -76,12 +76,12 @@ void List::remove(int v)
 {
     Node *p = header;
 
-    while (p->next != nullptr && p->next->vertex < v)
+    while (p->next != NULL && p->next->vertex < v)
     {
         p = p->next;
     }
 
-    if (p->next != nullptr && p->next->vertex == v)
+    if (p->next != NULL && p->next->vertex == v)
     {
         Node *temp = p->next;
         p->next = temp->next;
@@ -96,7 +96,7 @@ void List::print() const
 {
     Node *p = header->next;
 
-    while (p != nullptr)
+    while (p != NULL)
     {
         cout << " (" << setw(2) << p->vertex
              << ", " << setw(2) << p->weight << ") ";
