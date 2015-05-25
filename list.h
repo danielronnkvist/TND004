@@ -1,5 +1,5 @@
 /*********************************************
-* file:	~\tnd004\lab\lab4a\list.h            *
+* file:	~\tnd004\lab\lab4b\list.h            *
 * remark: interface for adjacency lists      *
 **********************************************/
 
@@ -10,7 +10,7 @@ class Node
 {
 public:
     // -- CONSTRUCTORS
-    Node(int v = 0, int w = 0, Node *n = nullptr)
+    Node(int v = 0, int w = 0, Node *n = NULL)
     : vertex(v), weight(w), next(n) { }
 
     // -- DATA MEMBERS
@@ -30,10 +30,10 @@ public:
 
     // -- MEMBER FUNCTIONS
 
-    // return pointer to first node (or nullptr)
+    // return pointer to first node (or NULL)
     Node * getFirst();
 
-    // return pointer to next node (or nullptr)
+    // return pointer to next node (or NULL)
     Node * getNext();
 
     // insert vertex v in sorted order
